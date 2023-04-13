@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/vivekprm/go-full-stack/src/webapp/viewmodel"
 )
 
 func main() {
@@ -13,8 +15,17 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]
 		t := templates[requestedFile + ".html"]
+		var context interface{}
+		switch requestedFile {
+		case "home":
+			context = viewmodel.NewHome()
+		case "login":
+			context = viewmodel.NewLogin()
+		case "todo":
+			context = viewmodel.NewTodo()
+		}
 		if t != nil {
-			err := t.Execute(w, nil)
+			err := t.Execute(w, context)
 			if err != nil {
 				log.Println(err)
 			}
@@ -31,7 +42,7 @@ func populateTemplates() map[string]*template.Template{
 	result := make(map[string]*template.Template)
 	const basePath = "templates/"
 	layout := template.Must(template.ParseFiles(basePath + "_layout.html"))
-	template.Must(layout.ParseFiles(basePath + "_header.html", basePath + "_footer.html"))
+	template.Must(layout.ParseFiles(basePath + "_header.html", basePath + "_scripts.html", basePath + "_footer.html"))
 
 	dir, err := os.Open(basePath + "/content")
 	if err != nil {
