@@ -1,7 +1,17 @@
+.container {
+    margin-top: 10px;
+}
 .row {
     margin-top: 20px;
 }
 
 #id-add-new{
     margin-right: 5px;
+}
+.btn-toolbar {
+    justify-content: flex-end;
+}
+
+.pagination {
+    margin-top: 30px;
 }
