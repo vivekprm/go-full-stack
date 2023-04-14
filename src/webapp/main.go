@@ -66,9 +66,21 @@ func populateTemplates() map[string]*template.Template{
 		}
 		f.Close()
 		tmpl := template.Must(layout.Clone())
-		_, err = tmpl.Parse(string(content))
-		if err != nil {
-			panic("Failed to parse contents of '" + fi.Name() + "' as template")
+
+		if fi.Name() == "home.html" {
+			fm := template.FuncMap{}
+			fm["mod"] = func(x, y int) int {
+				return x%y
+			}
+			_, err = tmpl.Funcs(fm).Parse(string(content))
+			if err != nil {
+				panic("Failed to parse contents of '" + fi.Name() + "' as template")
+			}
+		} else {
+			_, err = tmpl.Parse(string(content))
+			if err != nil {
+				panic("Failed to parse contents of '" + fi.Name() + "' as template")
+			}
 		}
 		result[fi.Name()] = tmpl
 	}

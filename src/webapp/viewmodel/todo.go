@@ -1,12 +1,12 @@
 package viewmodel
 
-type Todo struct {
+type TodoPage struct {
 	Title string
 	Active string
 }
 
-func NewTodo() Todo {
-	return Todo {
+func NewTodo() TodoPage {
+	return TodoPage {
 		Title: "Todo - New",
 		Active: "todo",
 	}
