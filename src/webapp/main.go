@@ -14,7 +14,7 @@ func main() {
 	templates := populateTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]
-		t := templates[requestedFile + ".html"]
+		t := templates[requestedFile+".html"]
 		var context interface{}
 		switch requestedFile {
 		case "home":
@@ -35,14 +35,14 @@ func main() {
 	})
 	http.Handle("/img/", http.FileServer(http.Dir("public")))
 	http.Handle("/css/", http.FileServer(http.Dir("public")))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8000", nil)
 }
 
-func populateTemplates() map[string]*template.Template{
+func populateTemplates() map[string]*template.Template {
 	result := make(map[string]*template.Template)
 	const basePath = "templates/"
 	layout := template.Must(template.ParseFiles(basePath + "_layout.html"))
-	template.Must(layout.ParseFiles(basePath + "_header.html", basePath + "_scripts.html", basePath + "_footer.html"))
+	template.Must(layout.ParseFiles(basePath+"_header.html", basePath+"_scripts.html", basePath+"_footer.html"))
 
 	dir, err := os.Open(basePath + "/content")
 	if err != nil {
@@ -70,7 +70,7 @@ func populateTemplates() map[string]*template.Template{
 		if fi.Name() == "home.html" {
 			fm := template.FuncMap{}
 			fm["mod"] = func(x, y int) int {
-				return x%y
+				return x % y
 			}
 			_, err = tmpl.Funcs(fm).Parse(string(content))
 			if err != nil {
